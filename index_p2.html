@@ -43,7 +43,7 @@
                 <h3>Saldo Actual</h3>
                 <div class="balance-display">
                     <!-- El monto estará oculto o visible dinámicamente -->
-                    <span id="balance-amount" class="amount" data-real-amount="1500.00">***</span>
+                    <span id="balance-amount" class="amount">***</span> <!--"1500.00"-->
                     <button id="toggle-visibility-btn" aria-label="Mostrar u Ocultar Saldo">
                         <span id="eye-icon">👁️</span>
                     </button>
@@ -86,7 +86,7 @@
         <!-- ========================================== -->
         <!-- VISTA 2: Historial de movimientos          -->
         <!-- ========================================== -->
-        <section id="history-view" class="view-section hidden" style="display: none;">
+        <section id="history-view" class="view-section hidden">
             <header class="view-header">
                 <h2>Historial de Movimientos</h2>
             </header>
@@ -117,14 +117,14 @@
                             <td>001234</td>
                             <td>Pago Móvil a Juan Pérez</td>
                             <td class="outcome">- $50.00</td>
-                            <td><button class="view-detail-btn" data-tx-id="1">Ver Detalle</button></td>
+                            <td><button class="view-detail-btn">Ver Detalle</button></td>
                         </tr>
                         <tr>
                             <td>09/05/2026</td>
                             <td>001235</td>
                             <td>Transferencia Recibida</td>
                             <td class="income">+ $200.00</td>
-                            <td><button class="view-detail-btn" data-tx-id="2">Ver Detalle</button></td>
+                            <td><button class="view-detail-btn">Ver Detalle</button></td>
                         </tr>
                         <!-- Más filas... -->
                     </tbody>
@@ -135,7 +135,7 @@
         <!-- ========================================== -->
         <!-- VISTA 3: Detalle de transacción individual -->
         <!-- ========================================== -->
-        <section id="transaction-detail-view" class="view-section hidden" style="display: none;">
+        <section id="transaction-detail-view" class="view-section hidden">
             <header class="view-header">
                 <h2>Detalle de la Transacción</h2>
                 <button id="back-to-history-btn">⬅ Volver al Historial</button>
