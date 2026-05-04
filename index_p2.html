@@ -1,11 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Banca 360 - Dashboard y Movimientos</title>
 </head>
 <body>
-    <h1>Prueba de commit</h1>
+    <!-- Menú de navegación principal -->
+    <header>
+        <nav class="main-nav">
+            <div class="logo">Banca 360</div>
+            <ul class="nav-links">
+                <li><a href="#dashboard-view" id="link-dashboard">Resumen</a></li>
+                <li><a href="#history-view" id="link-history">Historial de Movimientos</a></li>
+                <!-- Otras opciones del sistema -->
+                <li><a href="#transfers-view" id="link-transfers">Transferencias / Pago Móvil</a></li>
+                <li><a href="#profile-view" id="link-profile">Perfil</a></li>
+            </ul>
+            <div class="theme-toggle">
+                <!-- Botón para Modo Oscuro/Claro requerido -->
+                <button id="toggle-theme-btn" aria-label="Cambiar tema">🌓 Cambiar Tema</button>
+            </div>
+            <div class="user-actions">
+                <button id="logout-btn">Cerrar Sesión</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenedor principal de vistas (SPA con JS puro) -->
+    <main id="app-content">
+        
+        <!-- ========================================== -->
+        <!-- VISTA 1: Dashboard (Landing page / Resumen) -->
+        <!-- ========================================== -->
+        <section id="dashboard-view" class="view-section active">
+            <header class="view-header">
+                <h2>Resumen de Cuenta</h2>
+            </header>
+            
+            <!-- Visualización de Saldo actual -->
+            <div class="balance-card">
+                <h3>Saldo Actual</h3>
+                <div class="balance-display">
+                    <!-- El monto estará oculto o visible dinámicamente -->
+                    <span id="balance-amount" class="amount" data-real-amount="1500.00">***</span>
+                    <button id="toggle-visibility-btn" aria-label="Mostrar u Ocultar Saldo">
+                        <span id="eye-icon">👁️</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabla/lista de las últimas 3 transacciones -->
+            <div class="recent-transactions">
+                <h3>Últimas Transacciones</h3>
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-transactions-body">
+                        <!-- Ejemplo de estructura. Se inyectará con JS -->
+                        <tr>
+                            <td>10/05/2026</td>
+                            <td>Pago Móvil a Juan Pérez</td>
+                            <td class="outcome">- $50.00</td>
+                        </tr>
+                        <tr>
+                            <td>09/05/2026</td>
+                            <td>Transferencia Recibida</td>
+                            <td class="income">+ $200.00</td>
+                        </tr>
+                        <tr>
+                            <td>08/05/2026</td>
+                            <td>Compra en Supermercado</td>
+                            <td class="outcome">- $120.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VISTA 2: Historial de movimientos          -->
+        <!-- ========================================== -->
+        <section id="history-view" class="view-section hidden" style="display: none;">
+            <header class="view-header">
+                <h2>Historial de Movimientos</h2>
+            </header>
+
+            <!-- Sistema de filtros -->
+            <div class="filters">
+                <button id="filter-all" class="filter-btn active">Todos</button>
+                <button id="filter-income" class="filter-btn">Solo entradas</button>
+                <button id="filter-outcome" class="filter-btn">Solo salidas</button>
+            </div>
+
+            <!-- Vista detallada de todas las transacciones -->
+            <div class="history-list">
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Referencia</th>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-transactions-body">
+                        <!-- Ejemplo de estructura de fila -->
+                        <tr>
+                            <td>10/05/2026</td>
+                            <td>001234</td>
+                            <td>Pago Móvil a Juan Pérez</td>
+                            <td class="outcome">- $50.00</td>
+                            <td><button class="view-detail-btn" data-tx-id="1">Ver Detalle</button></td>
+                        </tr>
+                        <tr>
+                            <td>09/05/2026</td>
+                            <td>001235</td>
+                            <td>Transferencia Recibida</td>
+                            <td class="income">+ $200.00</td>
+                            <td><button class="view-detail-btn" data-tx-id="2">Ver Detalle</button></td>
+                        </tr>
+                        <!-- Más filas... -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VISTA 3: Detalle de transacción individual -->
+        <!-- ========================================== -->
+        <section id="transaction-detail-view" class="view-section hidden" style="display: none;">
+            <header class="view-header">
+                <h2>Detalle de la Transacción</h2>
+                <button id="back-to-history-btn">⬅ Volver al Historial</button>
+            </header>
+
+            <!-- Vista individual de la transacción seleccionada -->
+            <div class="transaction-receipt">
+                <div class="receipt-header">
+                    <h3>Comprobante de Operación</h3>
+                </div>
+                <div class="receipt-body">
+                    <p><strong>Número de Referencia:</strong> <span id="detail-ref">001234</span></p>
+                    <p><strong>Fecha y Hora:</strong> <span id="detail-date">10/05/2026 14:30:00</span></p>
+                    <p><strong>Descripción:</strong> <span id="detail-desc">Pago Móvil a Juan Pérez</span></p>
+                    <p><strong>Tipo de Operación:</strong> <span id="detail-type">Salida</span></p>
+                    <p><strong>Monto:</strong> <span id="detail-amount" class="outcome">- $50.00</span></p>
+                    <p><strong>Estado:</strong> <span id="detail-status">Aprobado</span></p>
+                </div>
+                <div class="receipt-footer">
+                    <button id="download-receipt-btn">Descargar Comprobante</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Aquí se enlazará el archivo JS puro posteriormente -->
+    <!-- <script src="app.js"></script> -->
 </body>
 </html>
