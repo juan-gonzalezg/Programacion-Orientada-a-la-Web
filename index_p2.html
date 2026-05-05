@@ -1,168 +1,237 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banca 360 - Dashboard y Movimientos</title>
+    
+    <!-- Importación de la tipografía de la identidad visual -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Enlace al archivo CSS externo (a crear posteriormente) -->
+    <link rel="stylesheet" href="style_p2.css">
 </head>
 <body>
-    <!-- Menú de navegación principal -->
-    <header>
-        <nav class="main-nav">
-            <div class="logo">Banca 360</div>
-            <ul class="nav-links">
-                <li><a href="#dashboard-view" id="link-dashboard">Resumen</a></li>
-                <li><a href="#history-view" id="link-history">Historial de Movimientos</a></li>
-                <!-- Otras opciones del sistema -->
-                <li><a href="#transfers-view" id="link-transfers">Transferencias / Pago Móvil</a></li>
-                <li><a href="#profile-view" id="link-profile">Perfil</a></li>
-            </ul>
-            <div class="theme-toggle">
-                <!-- Botón para Modo Oscuro/Claro requerido -->
-                <button id="toggle-theme-btn" aria-label="Cambiar tema">🌓 Cambiar Tema</button>
-            </div>
-            <div class="user-actions">
-                <button id="logout-btn">Cerrar Sesión</button>
-            </div>
-        </nav>
-    </header>
 
-    <!-- Contenedor principal de vistas (SPA con JS puro) -->
-    <main id="app-content">
+    <!-- ==========================================
+         BARRA DE NAVEGACIÓN LATERAL (Sidebar)
+         ========================================== -->
+    <aside class="sidebar" id="main-sidebar">
+        <div class="brand-logo">
+            <span class="logo-icon" aria-hidden="true">🏦</span>
+            <span class="logo-text">Banca 360</span>
+        </div>
         
-        <!-- ========================================== -->
-        <!-- VISTA 1: Dashboard (Landing page / Resumen) -->
-        <!-- ========================================== -->
-        <section id="dashboard-view" class="view-section active">
+        <nav class="main-nav" aria-label="Navegación Principal">
+            <ul class="nav-links">
+                <li>
+                    <a href="#dashboard-view" class="nav-item active" id="link-dashboard">
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
+                        <span class="nav-text">Resumen</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#history-view" class="nav-item" id="link-history">
+                        <span class="nav-icon" aria-hidden="true">📋</span>
+                        <span class="nav-text">Historial</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#transfers-view" class="nav-item" id="link-transfers">
+                        <span class="nav-icon" aria-hidden="true">💸</span>
+                        <span class="nav-text">Transferir</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#profile-view" class="nav-item" id="link-profile">
+                        <span class="nav-icon" aria-hidden="true">👤</span>
+                        <span class="nav-text">Perfil</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button type="button" id="toggle-theme-btn" class="btn-outline">
+                <span aria-hidden="true">🌓</span> Modo Oscuro
+            </button>
+            <button type="button" id="logout-btn" class="btn-outline btn-logout">
+                Cerrar Sesión
+            </button>
+        </div>
+    </aside>
+
+    <!-- ==========================================
+         CONTENEDOR PRINCIPAL DE LA APLICACIÓN (SPA)
+         ========================================== -->
+    <main class="main-content" id="app-content">
+        
+        <!-- ==========================================
+             VISTA 1: DASHBOARD (Resumen Ejecutivo)
+             ========================================== -->
+        <section id="dashboard-view" class="view-section active" aria-labelledby="dashboard-title">
             <header class="view-header">
-                <h2>Resumen de Cuenta</h2>
+                <h1 id="dashboard-title" class="header-title">Hola, Alejandro</h1>
             </header>
             
-            <!-- Visualización de Saldo actual -->
-            <div class="balance-card">
-                <h3>Saldo Actual</h3>
-                <div class="balance-display">
-                    <!-- El monto estará oculto o visible dinámicamente -->
-                    <span id="balance-amount" class="amount">***</span> <!--"1500.00"-->
-                    <button id="toggle-visibility-btn" aria-label="Mostrar u Ocultar Saldo">
-                        <span id="eye-icon">👁️</span>
+            <!-- Hero: Tarjeta de Saldo Disponible -->
+            <article class="card balance-card">
+                <h2 class="balance-label">Saldo Disponible</h2>
+                <div class="balance-wrapper">
+                    <span id="balance-amount" class="balance-amount">Bs. 4,500.00</span>
+                    <button type="button" id="toggle-visibility-btn" class="btn-icon" aria-label="Ocultar Saldo">
+                        <span id="visibility-icon" aria-hidden="true">👁️</span>
                     </button>
                 </div>
-            </div>
+            </article>
 
-            <!-- Tabla/lista de las últimas 3 transacciones -->
-            <div class="recent-transactions">
-                <h3>Últimas Transacciones</h3>
-                <table class="transaction-table">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Descripción</th>
-                            <th>Monto</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recent-transactions-body">
-                        <!-- Ejemplo de estructura. Se inyectará con JS -->
-                        <tr>
-                            <td>10/05/2026</td>
-                            <td>Pago Móvil a Juan Pérez</td>
-                            <td class="outcome">- $50.00</td>
-                        </tr>
-                        <tr>
-                            <td>09/05/2026</td>
-                            <td>Transferencia Recibida</td>
-                            <td class="income">+ $200.00</td>
-                        </tr>
-                        <tr>
-                            <td>08/05/2026</td>
-                            <td>Compra en Supermercado</td>
-                            <td class="outcome">- $120.00</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Acciones Rápidas (Quick Actions) -->
+            <nav class="quick-actions" aria-label="Acciones Rápidas">
+                <button type="button" class="action-btn" id="qa-transfer">
+                    <span class="action-icon" aria-hidden="true">💸</span>
+                    <span class="action-label">Transferir</span>
+                </button>
+                <button type="button" class="action-btn" id="qa-mobile-payment">
+                    <span class="action-icon" aria-hidden="true">📱</span>
+                    <span class="action-label">Pago Móvil</span>
+                </button>
+                <button type="button" class="action-btn" id="qa-deposit">
+                    <span class="action-icon" aria-hidden="true">⬇️</span>
+                    <span class="action-label">Ingresar</span>
+                </button>
+            </nav>
+
+            <!-- Resumen de Últimas Transacciones -->
+            <section class="recent-transactions">
+                <header class="section-header">
+                    <h3 class="section-title">Últimos Movimientos</h3>
+                    <a href="#history-view" class="link-primary" id="link-view-all">Ver todos</a>
+                </header>
+                
+                <div class="tx-list" id="recent-tx-list">
+                    <!-- Ítem: Salida -->
+                    <article class="tx-item" tabindex="0" aria-label="Ver detalle de Pago Móvil a Farmatodo">
+                        <div class="tx-icon icon-pago" aria-hidden="true">📱</div>
+                        <div class="tx-info">
+                            <h4 class="tx-title">Pago Móvil a Farmatodo</h4>
+                            <p class="tx-date">Hoy, 10:45 AM</p>
+                        </div>
+                        <div class="tx-amount amount-out">- Bs. 450.00</div>
+                    </article>
+                    
+                    <!-- Ítem: Entrada -->
+                    <article class="tx-item" tabindex="0" aria-label="Ver detalle de Transferencia de Nómina">
+                        <div class="tx-icon icon-transfer" aria-hidden="true">🏦</div>
+                        <div class="tx-info">
+                            <h4 class="tx-title">Transferencia de Nómina</h4>
+                            <p class="tx-date">Ayer, 03:20 PM</p>
+                        </div>
+                        <div class="tx-amount amount-in">+ Bs. 3,200.00</div>
+                    </article>
+
+                    <!-- Ítem: Salida -->
+                    <article class="tx-item" tabindex="0" aria-label="Ver detalle de Suscripción Netflix">
+                        <div class="tx-icon icon-card" aria-hidden="true">💳</div>
+                        <div class="tx-info">
+                            <h4 class="tx-title">Suscripción Netflix</h4>
+                            <p class="tx-date">08 May 2026</p>
+                        </div>
+                        <div class="tx-amount amount-out">- Bs. 180.00</div>
+                    </article>
+                </div>
+            </section>
+        </section>
+
+        <!-- ==========================================
+             VISTA 2: HISTORIAL DE MOVIMIENTOS
+             ========================================== -->
+        <section id="history-view" class="view-section" aria-labelledby="history-title">
+            <header class="view-header">
+                <h1 id="history-title" class="header-title">Historial de Movimientos</h1>
+            </header>
+
+            <!-- Sistema de Filtros -->
+            <nav class="filters" aria-label="Filtros de transacciones">
+                <button type="button" id="filter-all" class="filter-btn active">Todos los movimientos</button>
+                <button type="button" id="filter-income" class="filter-btn">Solo entradas</button>
+                <button type="button" id="filter-outcome" class="filter-btn">Solo salidas</button>
+            </nav>
+
+            <div class="tx-list" id="full-tx-list">
+                <!-- Los ítems del historial (maqueta inicial) -->
+                <article class="tx-item" tabindex="0" aria-label="Ver detalle de Pago Móvil a Farmatodo">
+                    <div class="tx-icon icon-pago" aria-hidden="true">📱</div>
+                    <div class="tx-info">
+                        <h4 class="tx-title">Pago Móvil a Farmatodo</h4>
+                        <p class="tx-date">10 May 2026 • Ref: 893421</p>
+                    </div>
+                    <div class="tx-amount amount-out">- Bs. 450.00</div>
+                </article>
+
+                <article class="tx-item" tabindex="0" aria-label="Ver detalle de Transferencia de Nómina">
+                    <div class="tx-icon icon-transfer" aria-hidden="true">🏦</div>
+                    <div class="tx-info">
+                        <h4 class="tx-title">Transferencia de Nómina</h4>
+                        <p class="tx-date">09 May 2026 • Ref: 102938</p>
+                    </div>
+                    <div class="tx-amount amount-in">+ Bs. 3,200.00</div>
+                </article>
             </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- VISTA 2: Historial de movimientos          -->
-        <!-- ========================================== -->
-        <section id="history-view" class="view-section hidden">
-            <header class="view-header">
-                <h2>Historial de Movimientos</h2>
+        <!-- ==========================================
+             VISTA 3: DETALLE DE TRANSACCIÓN
+             ========================================== -->
+        <section id="transaction-detail-view" class="view-section" aria-labelledby="detail-title">
+            <header class="section-header">
+                <h1 id="detail-title" class="header-title">Detalle de Operación</h1>
+                <button type="button" id="back-to-history-btn" class="btn-outline-small">
+                    <span aria-hidden="true">⬅</span> Volver
+                </button>
             </header>
 
-            <!-- Sistema de filtros -->
-            <div class="filters">
-                <button id="filter-all" class="filter-btn active">Todos</button>
-                <button id="filter-income" class="filter-btn">Solo entradas</button>
-                <button id="filter-outcome" class="filter-btn">Solo salidas</button>
-            </div>
-
-            <!-- Vista detallada de todas las transacciones -->
-            <div class="history-list">
-                <table class="transaction-table">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Referencia</th>
-                            <th>Descripción</th>
-                            <th>Monto</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="history-transactions-body">
-                        <!-- Ejemplo de estructura de fila -->
-                        <tr>
-                            <td>10/05/2026</td>
-                            <td>001234</td>
-                            <td>Pago Móvil a Juan Pérez</td>
-                            <td class="outcome">- $50.00</td>
-                            <td><button class="view-detail-btn">Ver Detalle</button></td>
-                        </tr>
-                        <tr>
-                            <td>09/05/2026</td>
-                            <td>001235</td>
-                            <td>Transferencia Recibida</td>
-                            <td class="income">+ $200.00</td>
-                            <td><button class="view-detail-btn">Ver Detalle</button></td>
-                        </tr>
-                        <!-- Más filas... -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- VISTA 3: Detalle de transacción individual -->
-        <!-- ========================================== -->
-        <section id="transaction-detail-view" class="view-section hidden">
-            <header class="view-header">
-                <h2>Detalle de la Transacción</h2>
-                <button id="back-to-history-btn">⬅ Volver al Historial</button>
-            </header>
-
-            <!-- Vista individual de la transacción seleccionada -->
-            <div class="transaction-receipt">
+            <article class="card receipt-card">
+                <!-- Encabezado del comprobante -->
                 <div class="receipt-header">
-                    <h3>Comprobante de Operación</h3>
+                    <div class="tx-icon icon-pago icon-large" aria-hidden="true">📱</div>
+                    <h2 class="tx-amount-large amount-out" id="detail-amount">- Bs. 450.00</h2>
+                    <p class="receipt-status success" id="detail-status">Operación Exitosa</p>
                 </div>
-                <div class="receipt-body">
-                    <p><strong>Número de Referencia:</strong> <span id="detail-ref">001234</span></p>
-                    <p><strong>Fecha y Hora:</strong> <span id="detail-date">10/05/2026 14:30:00</span></p>
-                    <p><strong>Descripción:</strong> <span id="detail-desc">Pago Móvil a Juan Pérez</span></p>
-                    <p><strong>Tipo de Operación:</strong> <span id="detail-type">Salida</span></p>
-                    <p><strong>Monto:</strong> <span id="detail-amount" class="outcome">- $50.00</span></p>
-                    <p><strong>Estado:</strong> <span id="detail-status">Aprobado</span></p>
+
+                <!-- Datos del comprobante -->
+                <div class="receipt-details">
+                    <div class="receipt-row">
+                        <span class="receipt-label">Referencia</span>
+                        <strong class="receipt-value" id="detail-ref">893421</strong>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Fecha y Hora</span>
+                        <strong class="receipt-value" id="detail-date">10/05/2026 10:45 AM</strong>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Concepto</span>
+                        <strong class="receipt-value" id="detail-desc">Pago Móvil a Farmatodo</strong>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Banco Destino</span>
+                        <strong class="receipt-value" id="detail-bank">Banesco</strong>
+                    </div>
                 </div>
-                <div class="receipt-footer">
-                    <button id="download-receipt-btn">Descargar Comprobante</button>
+
+                <!-- Acciones del comprobante -->
+                <div class="receipt-actions">
+                    <button type="button" id="download-receipt-btn" class="btn-primary">
+                        Descargar Comprobante
+                    </button>
                 </div>
-            </div>
+            </article>
         </section>
 
     </main>
 
-    <!-- Aquí se enlazará el archivo JS puro posteriormente -->
-    <!-- <script src="app.js"></script> -->
+    <!-- Enlace al archivo JS externo (a crear posteriormente) -->
+    <script src="script_p2.js"></script>
 </body>
 </html>
