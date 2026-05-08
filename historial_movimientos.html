@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banca 360 - Historial</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style_p2.css">
+
+    <!-- ========================================== -->
+    <!-- 📍 DEFENSA (RENDIMIENTO): 
+         Este script bloqueante pre-carga el modo oscuro ANTES de 
+         que el navegador pinte la pantalla, evitando el parpadeo (FOUC). -->
+    <!-- ========================================== -->
+    <script>
+        if(localStorage.getItem('temaPreferido') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+</head>
+<body>
+
+    <aside class="sidebar" id="main-sidebar">
+        <div class="brand-logo">
+            <span class="logo-icon" aria-hidden="true">🏦</span>
+            <span class="logo-text">Banca 360</span>
+        </div>
+        
+        <nav class="main-nav" aria-label="Navegación Principal">
+            <ul class="nav-links">
+                <li>
+                    <a href="dashboard_resumen.html" class="nav-item" id="link-dashboard">
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
+                        <span class="nav-text">Resumen</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="historial_movimientos.html" class="nav-item active" id="link-history">
+                        <span class="nav-icon" aria-hidden="true">📋</span>
+                        <span class="nav-text">Historial</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#transfers-view" class="nav-item" id="link-transfers">
+                        <span class="nav-icon" aria-hidden="true">💸</span>
+                        <span class="nav-text">Transferir</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#profile-view" class="nav-item" id="link-profile">
+                        <span class="nav-icon" aria-hidden="true">👤</span>
+                        <span class="nav-text">Perfil</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button type="button" id="toggle-theme-btn" class="btn-outline">
+                <span aria-hidden="true">🌓</span> Modo Oscuro
+            </button>
+            <button type="button" id="logout-btn" class="btn-outline btn-logout">
+                Cerrar Sesión
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content" id="app-content">
+        
+        <!-- 📍 DEFENSA: HISTORIAL EXHAUSTIVO -->
+        <section id="history-view" class="view-section active" aria-labelledby="history-title">
+            <header class="view-header">
+                <h1 id="history-title" class="header-title">Historial de Movimientos</h1>
+            </header>
+
+            <!-- 📍 DEFENSA: FILTROS RÁPIDOS -->
+            <nav class="filters" aria-label="Filtros de transacciones">
+                <button type="button" id="filter-all" class="filter-btn active">Todos los movimientos</button>
+                <button type="button" id="filter-income" class="filter-btn">Solo entradas</button>
+                <button type="button" id="filter-outcome" class="filter-btn">Solo salidas</button>
+            </nav>
+
+            <div class="tx-list" id="full-tx-list">
+                <!-- 📍 DEFENSA: Aquí el JavaScript pintará los artículos de forma dinámica -->
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script_p2.js"></script>
+</body>
+</html>

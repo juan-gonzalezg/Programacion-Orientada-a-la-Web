@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banca 360 - Detalle de Transacción</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style_p2.css">
+
+    <!-- ========================================== -->
+    <!-- 📍 DEFENSA (RENDIMIENTO): 
+         Este script bloqueante pre-carga el modo oscuro ANTES de 
+         que el navegador pinte la pantalla, evitando el parpadeo (FOUC). -->
+    <!-- ========================================== -->
+    <script>
+        if(localStorage.getItem('temaPreferido') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+</head>
+<body>
+
+    <aside class="sidebar" id="main-sidebar">
+        <div class="brand-logo">
+            <span class="logo-icon" aria-hidden="true">🏦</span>
+            <span class="logo-text">Banca 360</span>
+        </div>
+        
+        <nav class="main-nav" aria-label="Navegación Principal">
+            <ul class="nav-links">
+                <li>
+                    <a href="dashboard_resumen.html" class="nav-item" id="link-dashboard">
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
+                        <span class="nav-text">Resumen</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="historial_movimientos.html" class="nav-item active" id="link-history">
+                        <span class="nav-icon" aria-hidden="true">📋</span>
+                        <span class="nav-text">Historial</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#transfers-view" class="nav-item" id="link-transfers">
+                        <span class="nav-icon" aria-hidden="true">💸</span>
+                        <span class="nav-text">Transferir</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#profile-view" class="nav-item" id="link-profile">
+                        <span class="nav-icon" aria-hidden="true">👤</span>
+                        <span class="nav-text">Perfil</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button type="button" id="toggle-theme-btn" class="btn-outline">
+                <span aria-hidden="true">🌓</span> Modo Oscuro
+            </button>
+            <button type="button" id="logout-btn" class="btn-outline btn-logout">
+                Cerrar Sesión
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content" id="app-content">
+
+        <!-- 📍 DEFENSA: DETALLE INDIVIDUAL -->
+        <!-- Se implementa una tarjeta limpia y enfocada solo en los datos de la operación seleccionada -->
+        <section id="transaction-detail-view" class="view-section active" aria-labelledby="detail-title">
+            <header class="section-header">
+                <h1 id="detail-title" class="header-title">Detalle de Operación</h1>
+                <button type="button" id="back-to-history-btn" class="btn-outline-small" onclick="window.location.href='historial_movimientos.html'">
+                    <span aria-hidden="true">⬅</span> Volver
+                </button>
+            </header>
+
+            <article class="card receipt-card">
+                <div class="receipt-header">
+                    <div class="tx-icon icon-pago icon-large" aria-hidden="true">📱</div>
+                    <h2 class="tx-amount-large amount-out" id="detail-amount">- Bs. 450.00</h2>
+                    <p class="receipt-status success" id="detail-status">Operación Exitosa</p>
+                </div>
+
+                <div class="receipt-details">
+                    <div class="receipt-row">
+                        <span class="receipt-label">Referencia</span>
+                        <strong class="receipt-value" id="detail-ref">893421</strong>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Fecha y Hora</span>
+                        <strong class="receipt-value" id="detail-date">10/05/2026 10:45 AM</strong>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Concepto</span>
+                        <strong class="receipt-value" id="detail-desc">Pago Móvil a Farmatodo</strong>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Banco Destino</span>
+                        <strong class="receipt-value" id="detail-bank">Banesco</strong>
+                    </div>
+                </div>
+
+                <div class="receipt-actions">
+                    <button type="button" id="download-receipt-btn" class="btn-primary">
+                        Descargar Comprobante
+                    </button>
+                </div>
+            </article>
+        </section>
+
+    </main>
+
+    <script src="script_p2.js"></script>
+</body>
+</html>
