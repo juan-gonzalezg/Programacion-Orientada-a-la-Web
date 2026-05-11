@@ -11,10 +11,9 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* ============================================================================
-       1. BASE DE DATOS SIMULADA Y PERSISTENCIA (Mock Data + LocalStorage)
+       1. BASE DE DATOS SIMULADA (Datos 100% Estáticos para esta entrega)
        ============================================================================ */
-    // 1. Definimos los datos iniciales "quemados" (Por si es la primera vez que entran)
-    const transaccionesIniciales = [
+    const transacciones = [
         { id: 'REF-893421', tipo: 'out', categoria: 'pago-movil', concepto: 'Pago Móvil a Farmatodo', fecha: '10/05/2026 10:45 AM', monto: 450.00, bancoDestino: 'Banesco', estado: 'Operación Exitosa' },
         { id: 'REF-102938', tipo: 'in', categoria: 'transfer', concepto: 'Transferencia de Nómina', fecha: '09/05/2026 03:20 PM', monto: 3200.00, bancoDestino: 'Mercantil', estado: 'Operación Exitosa' },
         { id: 'REF-992837', tipo: 'out', categoria: 'card', concepto: 'Suscripción Netflix', fecha: '08/05/2026 08:00 AM', monto: 180.00, bancoDestino: 'Tarjeta Visa *4567', estado: 'Operación Exitosa' },
@@ -22,24 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'REF-112233', tipo: 'out', categoria: 'pago-movil', concepto: 'Pago Móvil a Panadería', fecha: '04/05/2026 06:30 PM', monto: 120.00, bancoDestino: 'Provincial', estado: 'Operación Exitosa' }
     ];
 
-    const saldoInicial = 4500.00;
-
-    // 2. MAGIA DE PERSISTENCIA: Intentamos leer del localStorage
-    let transacciones = JSON.parse(localStorage.getItem('bd_transacciones'));
-    let saldoActual = parseFloat(localStorage.getItem('bd_saldo'));
-
-    // 3. Si no existen en localStorage (es la primera vez que el usuario abre la app), 
-    // cargamos los estáticos y los guardamos en el navegador.
-    if (!transacciones) {
-        transacciones = transaccionesIniciales;
-        localStorage.setItem('bd_transacciones', JSON.stringify(transacciones));
-    }
-
-    if (isNaN(saldoActual)) {
-        saldoActual = saldoInicial;
-        localStorage.setItem('bd_saldo', saldoActual.toString());
-    }
-
+    let saldoActual = 4500.00;
     let saldoVisible = true;
 
     // Función auxiliar global para formatear moneda
@@ -53,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeBtn = document.getElementById('toggle-theme-btn');
     const htmlTag = document.documentElement;
 
-    // Recuperar la preferencia guardada previamente (Persistencia extra)
+    // Recuperar la preferencia guardada previamente (Persistencia visual)
     if(localStorage.getItem('temaPreferido') === 'dark') {
         htmlTag.setAttribute('data-theme', 'dark');
         if(themeBtn) themeBtn.innerHTML = '<span aria-hidden="true">☀️</span> Modo Claro';
@@ -65,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (temaActual === 'light') {
                 htmlTag.setAttribute('data-theme', 'dark');
                 themeBtn.innerHTML = '<span aria-hidden="true">☀️</span> Modo Claro';
-                localStorage.setItem('temaPreferido', 'dark'); // Guardamos para otras páginas
+                localStorage.setItem('temaPreferido', 'dark'); // Guardamos para no perderlo al cambiar de página
             } else {
                 htmlTag.setAttribute('data-theme', 'light');
                 themeBtn.innerHTML = '<span aria-hidden="true">🌓</span> Modo Oscuro';
@@ -128,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="tx-amount ${claseMonto}">${signo} ${formatearMoneda(tx.monto)}</div>
         `;
 
-        // Al hacer clic, guardamos los datos en localStorage y viajamos a la página de detalle
+        // Al hacer clic, pasamos los datos del comprobante a la otra página
         article.addEventListener('click', () => {
             localStorage.setItem('txSeleccionada', JSON.stringify(tx));
             window.location.href = 'detalles_operacion.html';
@@ -200,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const detailAmount = document.getElementById('detail-amount');
     
     if (detailAmount) {
-        // Recuperamos la información que guardamos en el localStorage antes de cambiar de página
+        // Recuperamos la información que pasamos desde la página anterior
         const txGuardada = localStorage.getItem('txSeleccionada');
         
         if (txGuardada) {
