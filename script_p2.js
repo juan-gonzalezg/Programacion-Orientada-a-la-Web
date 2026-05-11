@@ -1,5 +1,3 @@
-Quita que se pueda guardar en el navegador solo es para visualizar datos para la otra entrega si se usará el localstorage. Este es el script de js:
-
 /**
  * ============================================================================
  * BANCA 360 - CONTROLADOR PRINCIPAL (JavaScript Puro)
