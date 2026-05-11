@@ -3,15 +3,12 @@
  * BANCA 360 - CONTROLADOR PRINCIPAL (JavaScript Puro)
  * Proyecto 1 - Programación Orientada a la Web (UCAB)
  * ============================================================================
- * NOTA PARA LA DEFENSA: Al ser una arquitectura de múltiples archivos (MPA),
- * usamos condicionales (if) para ejecutar solo el código correspondiente a la 
- * página en la que el usuario se encuentra actualmente.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
     /* ============================================================================
-       1. BASE DE DATOS SIMULADA (Datos 100% Estáticos para esta entrega)
+       1. BASE DE DATOS SIMULADA (Datos 100% Estáticos)
        ============================================================================ */
     const transacciones = [
         { id: 'REF-893421', tipo: 'out', categoria: 'pago-movil', concepto: 'Pago Móvil a Farmatodo', fecha: '10/05/2026 10:45 AM', monto: 450.00, bancoDestino: 'Banesco', estado: 'Operación Exitosa' },
@@ -24,18 +21,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let saldoActual = 4500.00;
     let saldoVisible = true;
 
-    // Función auxiliar global para formatear moneda
     const formatearMoneda = (monto) => {
         return `Bs. ${monto.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     };
 
     /* ============================================================================
        2. CONTROLADOR DE TEMA GLOBAL (Modo Claro / Oscuro)
+       * Nota: Aquí SÍ mantenemos localStorage porque es la única forma 
+       * de que la página no vuelva al modo claro al cambiar de pestaña.
+       * Esto es "Estado de Interfaz", no base de datos.
        ============================================================================ */
     const themeBtn = document.getElementById('toggle-theme-btn');
     const htmlTag = document.documentElement;
 
-    // Recuperar la preferencia guardada previamente (Persistencia visual)
     if(localStorage.getItem('temaPreferido') === 'dark') {
         htmlTag.setAttribute('data-theme', 'dark');
         if(themeBtn) themeBtn.innerHTML = '<span aria-hidden="true">☀️</span> Modo Claro';
@@ -47,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (temaActual === 'light') {
                 htmlTag.setAttribute('data-theme', 'dark');
                 themeBtn.innerHTML = '<span aria-hidden="true">☀️</span> Modo Claro';
-                localStorage.setItem('temaPreferido', 'dark'); // Guardamos para no perderlo al cambiar de página
+                localStorage.setItem('temaPreferido', 'dark'); 
             } else {
                 htmlTag.setAttribute('data-theme', 'light');
                 themeBtn.innerHTML = '<span aria-hidden="true">🌓</span> Modo Oscuro';
@@ -63,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const balanceAmountElement = document.getElementById('balance-amount');
     const visibilityIcon = document.getElementById('visibility-icon');
 
-    // Solo se ejecuta si estamos en la página dashboard_resumen.html
     if (toggleVisibilityBtn && balanceAmountElement) {
         balanceAmountElement.textContent = formatearMoneda(saldoActual);
 
@@ -80,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ============================================================================
-       4. MOTOR DE RENDERIZADO DE TRANSACCIONES (Dashboard e Historial)
+       4. MOTOR DE RENDERIZADO DE TRANSACCIONES
        ============================================================================ */
     const obtenerDatosVisuales = (tx) => {
         let icono, claseIcono, signo, claseMonto;
@@ -99,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const article = document.createElement('article');
         article.className = 'tx-item';
         article.tabIndex = 0;
-        article.setAttribute('aria-label', `Ver detalle de ${tx.concepto}`);
         
         article.innerHTML = `
             <div class="tx-icon ${claseIcono}" aria-hidden="true">${icono}</div>
@@ -110,10 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="tx-amount ${claseMonto}">${signo} ${formatearMoneda(tx.monto)}</div>
         `;
 
-        // Al hacer clic, pasamos los datos del comprobante a la otra página
+        // CAMBIO IMPORTANTE: Pasamos el ID por la URL en vez de usar localStorage
         article.addEventListener('click', () => {
-            localStorage.setItem('txSeleccionada', JSON.stringify(tx));
-            window.location.href = 'detalles_operacion.html';
+            window.location.href = `detalles_operacion.html?id=${tx.id}`;
         });
         
         return article;
@@ -126,14 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (historyContainer) historyContainer.innerHTML = '';
         if (dashboardContainer) dashboardContainer.innerHTML = '';
 
-        // Si existe el contenedor del dashboard, mostramos solo 3
         if (dashboardContainer) {
             transacciones.slice(0, 3).forEach(tx => {
                 dashboardContainer.appendChild(crearElementoTransaccion(tx));
             });
         }
 
-        // Si existe el contenedor del historial, aplicamos filtros
         if (historyContainer) {
             const txFiltradas = transacciones.filter(tx => {
                 if (filtro === 'in') return tx.tipo === 'in';
@@ -150,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Renderizado inicial (se aplicará automáticamente al dashboard o al historial dependiendo de en cuál estemos)
     renderizarHistorial('all');
 
 
@@ -163,48 +155,61 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'filter-outcome', type: 'out' }
     ];
 
-    // Comprobamos si estamos en historial_movimientos.html (si el primer botón de filtro existe)
     if (document.getElementById('filter-all')) {
         btnsFiltro.forEach(btnInfo => {
             const boton = document.getElementById(btnInfo.id);
-            boton.addEventListener('click', () => {
-                btnsFiltro.forEach(b => document.getElementById(b.id).classList.remove('active'));
-                boton.classList.add('active');
-                renderizarHistorial(btnInfo.type);
-            });
+            if(boton) {
+                boton.addEventListener('click', () => {
+                    btnsFiltro.forEach(b => {
+                        const el = document.getElementById(b.id);
+                        if(el) el.classList.remove('active');
+                    });
+                    boton.classList.add('active');
+                    renderizarHistorial(btnInfo.type);
+                });
+            }
         });
     }
 
     /* ============================================================================
-       6. LÓGICA EXCLUSIVA DEL DETALLE DE TRANSACCIÓN
+       6. LÓGICA EXCLUSIVA DEL DETALLE DE TRANSACCIÓN (Leyendo de la URL)
        ============================================================================ */
-    // Comprobamos si estamos en la página detalles_operacion.html
     const detailAmount = document.getElementById('detail-amount');
     
     if (detailAmount) {
-        // Recuperamos la información que pasamos desde la página anterior
-        const txGuardada = localStorage.getItem('txSeleccionada');
+        // CAMBIO IMPORTANTE: Leemos el ID desde la URL (?id=REF-123)
+        const parametrosURL = new URLSearchParams(window.location.search);
+        const idTransaccion = parametrosURL.get('id');
         
-        if (txGuardada) {
-            const tx = JSON.parse(txGuardada);
-            const { icono, claseIcono, signo, claseMonto } = obtenerDatosVisuales(tx);
-            
-            document.querySelector('.receipt-header .tx-icon').className = `tx-icon ${claseIcono} icon-large`;
-            document.querySelector('.receipt-header .tx-icon').textContent = icono;
+        if (idTransaccion) {
+            // Buscamos la transacción en nuestra base de datos estática
+            const tx = transacciones.find(t => t.id === idTransaccion);
 
-            detailAmount.className = `tx-amount-large ${claseMonto}`;
-            detailAmount.textContent = `${signo} ${formatearMoneda(tx.monto)}`;
+            if(tx) {
+                const { icono, claseIcono, signo, claseMonto } = obtenerDatosVisuales(tx);
+                
+                const iconElement = document.querySelector('.receipt-header .tx-icon');
+                if(iconElement) {
+                    iconElement.className = `tx-icon ${claseIcono} icon-large`;
+                    iconElement.textContent = icono;
+                }
 
-            document.getElementById('detail-ref').textContent = tx.id;
-            document.getElementById('detail-date').textContent = tx.fecha;
-            document.getElementById('detail-desc').textContent = tx.concepto;
-            document.getElementById('detail-bank').textContent = tx.bancoDestino;
+                detailAmount.className = `tx-amount-large ${claseMonto}`;
+                detailAmount.textContent = `${signo} ${formatearMoneda(tx.monto)}`;
+
+                const idEl = document.getElementById('detail-ref'); if(idEl) idEl.textContent = tx.id;
+                const dateEl = document.getElementById('detail-date'); if(dateEl) dateEl.textContent = tx.fecha;
+                const descEl = document.getElementById('detail-desc'); if(descEl) descEl.textContent = tx.concepto;
+                const bankEl = document.getElementById('detail-bank'); if(bankEl) bankEl.textContent = tx.bancoDestino;
+            } else {
+                // Si el ID no existe en los datos estáticos
+                window.location.href = 'historial_movimientos.html';
+            }
         } else {
-            // Si alguien entra directo a detalles_operacion.html sin seleccionar, lo regresamos al historial
+            // Si entra directo sin ID
             window.location.href = 'historial_movimientos.html';
         }
     }
-
 
     /* ============================================================================
        7. CERRAR SESIÓN Y EXTRAS
@@ -213,17 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             if (confirm('¿Estás seguro que deseas cerrar sesión de forma segura?')) {
-                alert('Sesión finalizada con éxito.');
-                // window.location.href = 'login.html'; // Descomentar cuando exista login.html
+                window.location.href = 'login.html'; 
             }
         });
     }
-
-    const downloadBtn = document.getElementById('download-receipt-btn');
-    if (downloadBtn) {
-        downloadBtn.addEventListener('click', () => {
-            alert('Generando comprobante en PDF... \n(Simulación requerida por el PDF del proyecto)');
-        });
-    }
-
 });
