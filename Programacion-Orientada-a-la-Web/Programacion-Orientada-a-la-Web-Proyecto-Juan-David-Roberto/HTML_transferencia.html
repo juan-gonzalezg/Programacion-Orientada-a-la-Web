@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light" data-page-title="Banca 360 - Transferencias">
+<head>
+    <meta charset="UTF-8">
+    <script src="js/theme-persist.js"></script>
+    <script src="js/head-common.js"></script>
+</head>
+<body  data-current-nav="transferir"  id="transferencia">
+
+        <aside class="sidebar" id="main-sidebar"></aside>
+
+    <main  class="main-content" id="app-content"> 
+        <h1> Transferencia </h1>
+        <form action="" method="POST">
+            
+            <div> 
+                <label for="nombre">Nombre del destinatario:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            
+            <div> 
+                <label for="numero">Numero de cuenta:</label>
+                <input type="text" id="numero_de_cuenta" name="numero_de_cuenta"  maxlength="20" required>
+            
+            </div>
+
+            <div> 
+                <label for="monto">Monto:</label>
+                <input type="text" id="monto" name="monto_a_transferir" placeholder="0,00" required>
+            
+            </div>
+
+            <div> 
+                <label for="Documento">Documento:</label>
+                
+                <select name="tipo_documento" id="selector_documento">
+                    <option value="J">Jurídico</option>
+                    <option value="C">Cedula</option>
+                    <option value="P">Pasaporte</option>
+                </select>
+                
+                <input type="text" id="datos_documento" name="datos_del_documento" placeholder="Numero de documento" maxlength="10"  required>
+            </div>
+            
+            <div> 
+                <label for="telefono">Teléfono:</label>
+                <input type="text" id="telefono" name="telefono" placeholder="Ej: 0000-0000000"  required>
+            
+            </div>
+            
+            <div> 
+                <label for="selector">Banco destino:</label>
+                
+                <select name="tipo_banco" id="selector_banco">
+                    <option value="Bancamiga">Bancamiga</option>
+                    <option value="Bancaribe">Bancaribe</option>
+                    <option value="Banesco">Banesco</option>
+                    <option value="Caroni">Caroni</option>
+                    <option value="Exterior">Exterior</option>
+                    <option value="Mercantil">Mercantil</option>
+                </select>
+            </div>
+          <button type="submit" id="realizar" class="" >Realizar</button>
+    </form>
+    </main>
+    
+        <script src ="js/transferencia.js"></script>
+
+    <script src="js/sidebar.js"></script>
+    <script src="js/script_p2.js"></script>
+    
+</body>
+</html>
