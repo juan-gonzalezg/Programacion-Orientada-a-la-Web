@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light" data-page-title="Banca 360 - Autenticación">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/theme-persist.js"></script>
+    <script src="../js/head-common.js"></script>
+</head>
+<body data-current-nav="login">
+
+    <!-- Envoltura para centrar el formulario en la pantalla sin sidebar -->
+    <main class="auth-body">
+        
+        <article class="card auth-card">
+            
+            <div class="brand-logo" style="justify-content: center; margin-bottom: 20px;">
+                <span class="logo-icon" aria-hidden="true">🏦</span>
+                <span class="logo-text">Banca 360</span>
+            </div>
+
+            <!-- REGISTRO -->
+            <div id="seccion-registro" hidden>
+                <h2 class="header-title" style="font-size: 24px;">Crear Cuenta</h2>
+                <p class="subtitle-view" style="margin-bottom: 20px;">Seguridad como prioridad principal.</p>
+
+                <form id="form-registro">
+                    <div class="form-group">
+                        <label class="form-label">Correo Electrónico:</label>
+                        <input type="email" class="form-control" placeholder="usuario@correo.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Contraseña (6 números):</label>
+                        <input type="password" id="pass1" class="form-control" pattern="\d{6,}" title="Debe contener al menos 6 números" placeholder="••••••" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Confirmar Contraseña:</label>
+                        <input type="password" id="pass2" class="form-control" placeholder="••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Registrar</button>
+                    
+                    <div class="mt-4 text-center">
+                        <button type="button" class="btn-outline" onclick="window.location.reload();">Volver al inicio</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- PREGUNTAS DE SEGURIDAD -->
+            <div id="seccion-preguntas" hidden>
+                <h2 class="header-title" style="font-size: 24px;">Seguridad</h2>
+                <p class="subtitle-view" style="margin-bottom: 20px;">Configuración obligatoria para recuperación.</p>
+
+                <form id="form-preguntas">
+                    <div class="form-group">
+                        <label class="form-label">¿Nombre de tu primera mascota?</label>
+                        <input type="text" class="form-control" placeholder="Respuesta" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">¿Ciudad de nacimiento?</label>
+                        <input type="text" class="form-control" placeholder="Respuesta" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Guardar Configuración</button>
+                </form>
+            </div>
+
+            <!-- LOGIN -->
+            <div id="seccion-login">
+                <h2 class="header-title" style="font-size: 24px;">Iniciar Sesión</h2>
+                <p class="subtitle-view" style="margin-bottom: 20px;">Ingresa tus datos para acceder a tus fondos.</p>
+
+                <form id="form-login">
+                    <div class="form-group">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" placeholder="usuario@correo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" placeholder="••••••" required>
+                    </div>
+
+                    <button type="submit" id="btn-entrar" class="btn-primary">Ingresar a mi cuenta</button>
+                </form>
+
+                <div class="mt-4 text-center">
+                    <p class="form-label" style="margin-bottom: 10px;">¿No tienes cuenta?</p>
+                    <button id="btn-ir-registro" class="btn-outline">Crear cuenta nueva</button>
+                </div>
+
+                <div id="spinner" class="text-center" hidden>
+                    <p>Validando credenciales en servidor central...</p>
+                </div>
+            </div>
+
+            <!-- FINAL -->
+            <div id="seccion-final" hidden>
+                <div class="icon-large" style="color: var(--status-income);">✅</div>
+                <h1 class="header-title" style="font-size: 24px;">Bienvenido al Sistema</h1>
+                <p class="subtitle-view">Acceso validado correctamente. Redirigiendo...</p>
+            </div>
+
+        </article>
+    </main>
+    
+    <footer id="footer-auth" hidden>
+        <p>Síguenos en nuestras redes:</p>
+        <p>📷 Instagram &nbsp;|&nbsp; 📘 Facebook &nbsp;|&nbsp; 🐦 Twitter</p>
+    </footer>
+
+    <!-- 1. Primero cargamos los datos de los clientes -->
+    <script src="../js/cuentas.js"></script>
+    <!-- 2. Luego cargamos la lógica que usa esos datos -->
+    <script src="../js/autenticacion.js"></script>
+</body>
+</html>

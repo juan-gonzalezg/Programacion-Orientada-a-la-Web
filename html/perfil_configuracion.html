@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light" data-page-title="Banca 360 - Perfil">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banca 360 - Perfil</title>
+    
+    <!-- FUENTE DE GOOGLE -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 📍 EL ENLACE CORRECTO AL CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- 📍 RUTAS CORRECTAS A LOS SCRIPTS DE CABECERA -->
+    <script src="../js/theme-persist.js"></script>
+    <script src="../js/head-common.js"></script>
+</head>
+<body data-current-nav="perfil" id="perfil">
+
+    <aside class="sidebar" id="main-sidebar"></aside>
+
+    <main class="main-content" id="app-content"> 
+        <header class="view-header">
+            <h1 class="header-title">Perfil y Configuración</h1>
+            <p class="subtitle-view">Gestiona tus datos personales y credenciales de seguridad.</p>
+        </header>
+        
+        <div style="display: grid; gap: 24px; max-width: 800px;">
+            <article id="datos-personales" class="card">
+                <h2 class="section-title" style="margin-bottom: 20px;">Datos Personales</h2>
+                
+                <div class="data-row">
+                    <span class="data-label">Nombre Completo</span>
+                    <span class="data-value" id="perfil-nombre">Usuario Demo</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Correo Electrónico</span>
+                    <span class="data-value" id="perfil-correo">usuario@banca360.com</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Última conexión</span>
+                    <span class="data-value" id="perfil-fecha">Hoy, sesión segura</span>
+                </div>
+            </article>
+
+            <article id="cambio-contrasena" class="card">
+                <h2 class="section-title" style="margin-bottom: 20px; color: var(--brand-primary);">Cambiar Contraseña</h2>
+                <form id="form-cambio-clave" action="" method="POST">
+                    
+                    <div class="form-group"> 
+                        <label class="form-label" for="pass_actual">Contraseña Actual:</label>
+                        <input type="password" id="pass_actual" name="pass_actual" class="form-control" placeholder="••••••" required>
+                    </div>
+
+                    <div class="form-group"> 
+                        <label class="form-label" for="pass_nueva">Nueva Contraseña (mínimo 6 números):</label>
+                        <input type="password" id="pass_nueva" name="pass_nueva" class="form-control" pattern="\d{6,}" title="Debe contener al menos 6 números" placeholder="••••••" required>
+                    </div>
+
+                    <div class="form-group"> 
+                        <label class="form-label" for="pass_confirmar">Confirmar Nueva Contraseña:</label>
+                        <input type="password" id="pass_confirmar" name="pass_confirmar" class="form-control" placeholder="••••••" required>
+                    </div>
+
+                    <button type="submit" id="btn-cambiar-clave" class="btn-primary">Actualizar Credenciales</button>
+                </form>
+            </article>
+        </div>
+    </main>
+
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/cuentas.js"></script>
+    <script src="../js/dashboard-detalles_operaciones.js"></script>
+</body>
+</html>

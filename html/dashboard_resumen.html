@@ -8,9 +8,20 @@
 <html lang="es" data-theme="light" data-page-title="Banca 360 - Dashboard">
 <head>
     <meta charset="UTF-8">
-    <!-- Cabecera común: js/theme-persist.js (tema entre páginas) + js/head-common.js (viewport, fuentes, CSS, título). -->
-    <script src="js/theme-persist.js"></script>
-    <script src="js/head-common.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banca 360 - Dashboard</title>
+    
+    <!-- FUENTE DE GOOGLE (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 📍 ENLACE AL CSS MAESTRO (Ajustado para salir de la carpeta HTML y entrar a CSS) -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- SCRIPTS DE CABECERA (Tema oscuro y variables) -->
+    <script src="../js/theme-persist.js"></script>
+    <script src="../js/head-common.js"></script>
 </head>
 <body data-current-nav="dashboard">
 
@@ -55,7 +66,13 @@
 
     </main>
 
-    <script src="js/sidebar.js"></script>
-    <script src="js/script_p2.js"></script>
+    <!-- 1. El script de la barra lateral (Estructura) -->
+    <script src="../js/sidebar.js"></script>
+
+    <!-- 2. Primero cargamos los datos para tenerlos en memoria -->
+    <script src="../js/cuentas.js"></script>
+
+    <!-- 3. Luego cargamos la lógica, que utilizará los datos -->
+    <script src="../js/dashboard-detalles_operaciones.js"></script>
 </body>
 </html>
