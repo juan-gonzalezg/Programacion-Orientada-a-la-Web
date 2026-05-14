@@ -45,8 +45,7 @@
                     </a>
                 </li>
                 <li>
-                    <!-- 📍 CORRECCIÓN: El archivo se llama depositos.html, no HTML_depositos.html -->
-                    <a href="depositos.html" class="${marcarActivo('depositos')}">
+                    <a href="HTML_depositos.html" class="${marcarActivo('depositos')}">
                         <span class="nav-icon" aria-hidden="true">📈</span><span class="nav-text">Depósitos</span>
                     </a>
                 </li>

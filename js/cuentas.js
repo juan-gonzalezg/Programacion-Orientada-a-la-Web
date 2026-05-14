@@ -8,8 +8,8 @@ const CLIENTES_MOCK = [
     {
         // CLIENTE 0: Perfil Promedio (5 movimientos)
         usuario: { 
-            nombre: 'Alejandro Pérez', 
-            correo: 'alejandro.p@correo.com',
+            nombre: 'Juan González', 
+            correo: 'juan.g@correo.com',
             contrasena: '123456', // Estrictamente 6 números
             preguntasSeguridad: [
                 { pregunta: '¿Nombre de tu primera mascota?', respuesta: 'firulais' },
@@ -28,9 +28,9 @@ const CLIENTES_MOCK = [
     {
         // CLIENTE 1: Perfil Empresarial (3 movimientos)
         usuario: { 
-            nombre: 'María González', 
-            correo: 'mgonzalez@empresa.com',
-            contrasena: '98765432', // Más de 6 caracteres, estrictamente numéricos
+            nombre: 'David Garcia', 
+            correo: 'david.g@correo.com',
+            contrasena: '7890123', // Más de 6 caracteres, estrictamente numéricos
             preguntasSeguridad: [
                 { pregunta: '¿Nombre de tu primera mascota?', respuesta: 'luna' },
                 { pregunta: '¿Ciudad de nacimiento?', respuesta: 'maracaibo' }
@@ -46,9 +46,9 @@ const CLIENTES_MOCK = [
     {
         // CLIENTE 2: Perfil Estudiante (2 movimientos)
         usuario: { 
-            nombre: 'Carlos Mendoza', 
-            correo: 'carlos.mendoza@estudiante.com',
-            contrasena: '000000', // 6 caracteres numéricos
+            nombre: 'Roberto Ramirez', 
+            correo: 'roberto.r@correo.com',
+            contrasena: '45678901', // 6 caracteres numéricos
             preguntasSeguridad: [
                 { pregunta: '¿Nombre de tu primera mascota?', respuesta: 'max' },
                 { pregunta: '¿Ciudad de nacimiento?', respuesta: 'valencia' }
@@ -62,8 +62,10 @@ const CLIENTES_MOCK = [
     }
 ];
 
-// 📍 DEFENSA: Modifica este número (0, 1 o 2) para simular la sesión de un cliente diferente
-const INDICE_CLIENTE_ACTIVO = 0; 
+// 📍 DEFENSA: Lógica para saber quién inició sesión
+// Leemos la memoria del navegador. Si no hay nadie guardado (ej. entran directo al dashboard), usamos el cliente 0 por defecto.
+let indiceGuardado = localStorage.getItem('clienteActivoBanca360');
+const INDICE_CLIENTE_ACTIVO = indiceGuardado !== null ? parseInt(indiceGuardado) : 0; 
 
-// Variable global que usará el script de lógica
+// Exportamos los datos del cliente activo a la variable global que usan las demás páginas
 const MOCK_DATA = CLIENTES_MOCK[INDICE_CLIENTE_ACTIVO];

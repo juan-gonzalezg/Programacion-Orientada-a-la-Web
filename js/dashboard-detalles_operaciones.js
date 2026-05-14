@@ -9,30 +9,49 @@ document.addEventListener('DOMContentLoaded', () => {
     const paginaActual = document.body.getAttribute('data-current-nav');
 
     // ==========================================
-    // 1. MODO OSCURO / MODO CLARO
+    // 1. MODO OSCURO / MODO CLARO (Adaptado para Escritorio y Móvil)
     // ==========================================
+    // Escuchamos tanto el botón del sidebar como el botón del perfil (móvil)
     const themeBtn = document.getElementById('toggle-theme-btn');
+    const perfilThemeBtn = document.getElementById('perfil-theme-btn');
+    
     const themeIcon = document.getElementById('theme-icon');
     const themeText = document.getElementById('theme-text');
+    const perfilThemeIcon = document.getElementById('perfil-theme-icon');
+    const perfilThemeText = document.getElementById('perfil-theme-text');
 
-    if (themeBtn) {
-        const actualizarBotonTema = () => {
-            const esOscuro = document.documentElement.getAttribute('data-theme') === 'dark';
-            if (themeIcon && themeText) {
-                themeIcon.textContent = esOscuro ? '☀️' : '🌓';
-                themeText.textContent = esOscuro ? 'Modo Claro' : 'Modo Oscuro';
-            }
-        };
-        actualizarBotonTema();
+    const actualizarBotonesTema = () => {
+        const esOscuro = document.documentElement.getAttribute('data-theme') === 'dark';
+        
+        // Actualiza el botón del sidebar si existe
+        if (themeIcon && themeText) {
+            themeIcon.textContent = esOscuro ? '☀️' : '🌓';
+            themeText.textContent = esOscuro ? 'Modo Claro' : 'Modo Oscuro';
+        }
+        // Actualiza el botón de la vista móvil de perfil si existe
+        if (perfilThemeIcon && perfilThemeText) {
+            perfilThemeIcon.textContent = esOscuro ? '☀️' : '🌓';
+            perfilThemeText.textContent = esOscuro ? 'Modo Claro' : 'Modo Oscuro';
+        }
+    };
+    
+    actualizarBotonesTema(); // Ejecuta al cargar la página
 
-        themeBtn.addEventListener('click', () => {
-            const esOscuro = document.documentElement.getAttribute('data-theme') === 'dark';
-            const nuevoTema = esOscuro ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', nuevoTema);
-            if (typeof guardarTema === 'function') guardarTema(nuevoTema);
-            actualizarBotonTema();
-        });
-    }
+    const alternarTema = () => {
+        const esOscuro = document.documentElement.getAttribute('data-theme') === 'dark';
+        const nuevoTema = esOscuro ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', nuevoTema);
+        
+        // Usa la persistencia que ya tienes programada en tu archivo theme-persist.js
+        if (typeof window.Banca360Theme !== 'undefined') {
+            window.Banca360Theme.write(nuevoTema);
+        }
+        actualizarBotonesTema();
+    };
+
+    // Asignamos el evento de clic a cualquier botón de tema que esté en la pantalla
+    if (themeBtn) themeBtn.addEventListener('click', alternarTema);
+    if (perfilThemeBtn) perfilThemeBtn.addEventListener('click', alternarTema);
 
     // ==========================================
     // 2. DASHBOARD: OCULTAR / MOSTRAR SALDO Y DATOS DE USUARIO
@@ -41,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleVisBtn = document.getElementById('toggle-visibility-btn');
     const visibilityIcon = document.getElementById('visibility-icon');
     
-    // Inyectar datos del cliente activo leyendo desde MOCK_DATA (cuentas.js)
     const tituloDash = document.getElementById('dashboard-title');
     if (tituloDash) tituloDash.textContent = 'Hola, ' + MOCK_DATA.usuario.nombre;
     const mascaraCuenta = document.getElementById('account-mask');
@@ -66,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 3. RENDERIZADO DE TRANSACCIONES (DASHBOARD E HISTORIAL)
+    // 3. RENDERIZADO DE TRANSACCIONES
     // ==========================================
     const renderizarTransacciones = (filtro = 'all') => {
         const contenedorRecientes = document.getElementById('recent-tx-list');
@@ -81,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const tx = MOCK_DATA.transacciones[i];
 
             if (filtro !== 'all' && tx.tipo !== filtro) continue;
-            // Si estamos en el dashboard, solo mostramos las últimas 3 transacciones
             if (contenedorRecientes && i >= 3) break;
 
             const icono = tx.tipo === 'in' ? '⬇️' : '⬆️';
@@ -98,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             contenedor.insertAdjacentHTML('beforeend', itemHTML);
 
-            // Funcionalidad para ir al detalle de la operación al hacer clic
             const ultimoElemento = contenedor.lastElementChild;
             ultimoElemento.addEventListener('click', () => {
                 window.location.href = 'detalles_operacion.html?ref=' + encodeURIComponent(tx.id);
@@ -133,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let transaccionEncontrada = MOCK_DATA.transacciones[0]; 
 
-        // Buscar la transacción específica
         for (let i = 0; i < MOCK_DATA.transacciones.length; i++) {
             if (MOCK_DATA.transacciones[i].id === refBuscada) {
                 transaccionEncontrada = MOCK_DATA.transacciones[i];
@@ -141,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Inyectar de manera segura verificando que el elemento existe
         const elRef = document.getElementById('detail-ref');
         if (elRef) elRef.textContent = transaccionEncontrada.id;
 
@@ -161,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const elStatus = document.getElementById('detail-status');
         if (elStatus) elStatus.textContent = 'Operación Exitosa';
 
-        // Lógica del botón volver
         const btnVolver = document.getElementById('back-to-history-btn');
         if (btnVolver) {
             btnVolver.addEventListener('click', () => {
@@ -171,13 +184,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 6. FORMULARIOS (TRANSACCIONES, DEPÓSITOS Y PERFIL)
+    // 6. FORMULARIOS (TRANSACCIONES Y PERFIL)
     // ==========================================
     const interceptarFormulario = (idBoton, mensajeExito) => {
         const boton = document.getElementById(idBoton);
         if (boton) {
             boton.addEventListener('click', (evento) => {
-                // Validación para respetar las reglas de HTML5 (ej. evitar enviar campos vacíos)
                 const form = boton.closest('form');
                 if (form && !form.checkValidity()) return; 
 
@@ -192,11 +204,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (paginaActual === 'pago rapido') interceptarFormulario('realizar', 'Pago móvil procesado exitosamente.');
     if (paginaActual === 'depositos') interceptarFormulario('btn-depositar', 'Depósito registrado en el sistema simulado.');
 
-    // Validación estricta para el cambio de clave en el perfil
     if (paginaActual === 'perfil') {
         const formCambioClave = document.getElementById('form-cambio-clave');
         if (formCambioClave) {
-            // Llenar datos base del usuario
             document.getElementById('perfil-nombre').textContent = MOCK_DATA.usuario.nombre;
             document.getElementById('perfil-correo').textContent = MOCK_DATA.usuario.correo;
 
@@ -218,14 +228,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 7. CIERRE DE SESIÓN
+    // 7. CIERRE DE SESIÓN (Adaptado para Escritorio y Móvil)
     // ==========================================
     const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            if (confirm('¿Está seguro de que desea cerrar su sesión?')) {
-                window.location.href = 'cierre_sesion.html';
-            }
-        });
-    }
+    const perfilLogoutBtn = document.getElementById('perfil-logout-btn');
+
+    const procesarLogout = () => {
+        if (confirm('¿Está seguro de que desea cerrar su sesión?')) {
+            window.location.href = 'cierre_sesion.html';
+        }
+    };
+
+    // Asignamos el evento de clic a cualquier botón de cierre de sesión que esté activo
+    if (logoutBtn) logoutBtn.addEventListener('click', procesarLogout);
+    if (perfilLogoutBtn) perfilLogoutBtn.addEventListener('click', procesarLogout);
 });

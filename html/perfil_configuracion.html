@@ -27,7 +27,7 @@
             <p class="subtitle-view">Gestiona tus datos personales y credenciales de seguridad.</p>
         </header>
         
-        <div style="display: grid; gap: 24px; max-width: 800px;">
+        <div style="display: grid; gap: 24px; max-width: 800px; margin: 0 auto;">
             <article id="datos-personales" class="card">
                 <h2 class="section-title" style="margin-bottom: 20px;">Datos Personales</h2>
                 
@@ -67,6 +67,22 @@
                     <button type="submit" id="btn-cambiar-clave" class="btn-primary">Actualizar Credenciales</button>
                 </form>
             </article>
+
+            <!-- 📍 DEFENSA: TARJETA DE OPCIONES EXCLUSIVA PARA MÓVILES -->
+            <!-- Esta tarjeta usa la clase "mobile-only" que creamos en style.css -->
+            <article id="preferencias-app" class="card mobile-only">
+                <h2 class="section-title" style="margin-bottom: 20px;">Opciones de la App</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <button type="button" id="perfil-theme-btn" class="btn-outline">
+                        <span id="perfil-theme-icon" aria-hidden="true">🌓</span> 
+                        <span id="perfil-theme-text">Modo Oscuro</span>
+                    </button>
+                    <button type="button" id="perfil-logout-btn" class="btn-outline btn-logout">
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </article>
+
         </div>
     </main>
 
