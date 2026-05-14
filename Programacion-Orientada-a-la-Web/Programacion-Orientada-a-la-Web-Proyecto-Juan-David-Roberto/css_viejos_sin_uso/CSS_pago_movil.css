@@ -1,0 +1,91 @@
+
+* {
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: 'Segoe UI';
+    background-color: #cae4ff; 
+    display: flex;
+    justify-content: center;
+}
+
+main {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    justify-content: center;
+    max-height: 700;
+}
+
+form {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+h1 {
+    color: #1a3a5f;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+/* Contenedores de cada campo (divs) */
+div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: center;
+    padding: 1rem;
+
+}
+
+label {
+    color: #4a5568;
+    font-size: 0.95rem;
+}
+
+/* Estilos de entrada (input) y selección (select) */
+input[type="text"],
+select {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #2d3748;
+    background-color: #f8fafc;
+    text-align: center; 
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #4299e1;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+input::placeholder {
+    color: #a0aec0;
+    font-style: italic;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 1rem;
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+}
