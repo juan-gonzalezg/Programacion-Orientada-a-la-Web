@@ -79,7 +79,7 @@ formLogin.addEventListener('submit', (evento) => {
         seccionFinal.hidden = false; 
 
         setTimeout(() => {
-            window.location.href = '/html/dashboard_resumen.html';
+            window.location.href = './html/dashboard_resumen.html';
         }, 1000);
     }, 2000);
 });
