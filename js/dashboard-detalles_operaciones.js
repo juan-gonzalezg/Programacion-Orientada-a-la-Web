@@ -183,27 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ==========================================
-    // 6. FORMULARIOS (TRANSACCIONES Y PERFIL)
-    // ==========================================
-    const interceptarFormulario = (idBoton, mensajeExito) => {
-        const boton = document.getElementById(idBoton);
-        if (boton) {
-            boton.addEventListener('click', (evento) => {
-                const form = boton.closest('form');
-                if (form && !form.checkValidity()) return; 
-
-                evento.preventDefault(); 
-                alert(mensajeExito);
-                window.location.href = 'dashboard_resumen.html'; 
-            });
-        }
-    };
-
-    if (paginaActual === 'transferir') interceptarFormulario('realizar', 'Transferencia realizada con éxito.');
-    if (paginaActual === 'pago rapido') interceptarFormulario('realizar', 'Pago móvil procesado exitosamente.');
+  
     if (paginaActual === 'depositos') interceptarFormulario('btn-depositar', 'Depósito registrado en el sistema simulado.');
 
+    
     if (paginaActual === 'perfil') {
         const formCambioClave = document.getElementById('form-cambio-clave');
         if (formCambioClave) {
